@@ -43,9 +43,23 @@ public class Scanner extends AppCompatActivity {
                     public void run() {
                         resultData.setText(result.getText());
                         String checkText = resultData.getText().toString().trim();
+                        if (checkText.contains("Maps")) {
+                            checkText = checkText.replace("Maps ", "");
+                            checkText = "https://www.google.com/maps/place/" + checkText;
+                        } else if(checkText.contains("Search")) {
+                            checkText = checkText.replace("Search ", "");
+                            checkText = "https://www.google.com/search?q=" + checkText;
+                        }
                         if (checkText.contains("http")) {
                             Intent viewIntent = new Intent("android.intent.action.VIEW", Uri.parse(checkText));
                             startActivity(viewIntent);
+                        } else if (checkText.contains("Call")) {
+                            checkText = checkText.replace("Call ", "");
+                            if (checkText.matches("[0-9]+")) {
+                                Intent intent = new Intent(Intent.ACTION_DIAL);
+                                intent.setData(Uri.parse("tel:+55 11 " + checkText));
+                                startActivity(intent);
+                            }
                         }
                     }
                 });
